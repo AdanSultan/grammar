@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
+      - GPTZERO_API_KEY=${GPTZERO_API_KEY}
+      - TURNITIN_API_KEY=${TURNITIN_API_KEY}
+      - COPYLEAKS_API_KEY=${COPYLEAKS_API_KEY}
+      - ORIGINALITY_API_KEY=${ORIGINALITY_API_KEY}
+    depends_on:
+      - redis
+    volumes:
+      - ./models:/app/models
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data: 
